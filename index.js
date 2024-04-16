@@ -199,7 +199,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
               console.log(e);
             }
           }
-        }, [4000]);
+        }, [5000]);
       } catch (e) {
         console.log(e);
       }
@@ -251,7 +251,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
               console.log(e);
             }
           }
-        }, [4000]);
+        }, [5000]);
       } catch (e) {
         console.log(e);
       }
@@ -305,7 +305,7 @@ const generatedTimeEveryAfterEveryFiveMinTRX = () => {
               console.log(e);
             }
           }
-        }, [4000]);
+        }, [5000]);
       } catch (e) {
         console.log(e);
       }
