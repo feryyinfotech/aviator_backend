@@ -234,6 +234,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
             fd.append("overall", JSON.stringify(obj));
             //  trx 3
             try {
+              console.log("functoin call for 3 min")
               const response = await axios.post(
                 "https://zupeeter.com/Apitrx/insert_three_trx",
                 fd
@@ -288,6 +289,7 @@ const generatedTimeEveryAfterEveryFiveMinTRX = () => {
             fd.append("overall", JSON.stringify(obj));
             //  trx 3
             try {
+              console.log("functoin call for 5 min")
               const response = await axios.post(
                 "https://zupeeter.com/Apitrx/insert_five_trx",
                 fd
@@ -323,7 +325,7 @@ if (trx) {
   const currentSecond = nowIST.seconds();
 
   // Calculate remaining minutes and seconds until 22:28 IST
-  const minutesRemaining = 30 - currentMinute - 1;
+  const minutesRemaining = 15 - currentMinute - 1;
   const secondsRemaining = 60 - currentSecond;
 
   const delay = (minutesRemaining * 60 + secondsRemaining) * 1000;
