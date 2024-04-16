@@ -145,15 +145,6 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
       const datetoAPISend = parseInt(new Date().getTime().toString());
       const actualtome = soment.tz("Asia/Kolkata");
       const time = actualtome.add(8, "hours").valueOf();
-      // if (three === 3 && threeminApi) {
-      //   generatedTimeEveryAfterEveryThreeMinTRXAPICall3Sec();
-      //   threeminApi = false;
-      // }
-
-      // if (five === 3 && fiveminApi) {
-      //   generatedTimeEveryAfterEveryThreeMinTRXAPICall5Sec();
-      //   fiveminApi = false;
-      // }
 
       try {
         if (three === 2) {
@@ -332,7 +323,7 @@ if (trx) {
   const currentSecond = nowIST.seconds();
 
   // Calculate remaining minutes and seconds until 22:28 IST
-  const minutesRemaining = 60 - currentMinute - 1;
+  const minutesRemaining = 30 - currentMinute - 1;
   const secondsRemaining = 60 - currentSecond;
 
   const delay = (minutesRemaining * 60 + secondsRemaining) * 1000;
