@@ -199,7 +199,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
               console.log(e);
             }
           }
-        }, [5000]);
+        }, [6000]);
       } catch (e) {
         console.log(e);
       }
@@ -251,7 +251,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
               console.log(e);
             }
           }
-        }, [5000]);
+        }, [6000]);
       } catch (e) {
         console.log(e);
       }
@@ -305,7 +305,7 @@ const generatedTimeEveryAfterEveryFiveMinTRX = () => {
               console.log(e);
             }
           }
-        }, [5000]);
+        }, [6000]);
       } catch (e) {
         console.log(e);
       }
@@ -332,7 +332,7 @@ if (trx) {
   const currentSecond = nowIST.seconds();
 
   // Calculate remaining minutes and seconds until 22:28 IST
-  const minutesRemaining = 15 - currentMinute - 1;
+  const minutesRemaining = 45 - currentMinute - 1;
   const secondsRemaining = 60 - currentSecond;
 
   const delay = (minutesRemaining * 60 + secondsRemaining) * 1000;
