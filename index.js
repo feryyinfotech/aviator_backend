@@ -127,6 +127,9 @@ const generatedTimeEveryAfterEveryFiveMin = () => {
   });
 };
 
+let twoMinTrxJob;
+let threeMinTrxJob;
+
 // TRX
 // color prediction game time generated every 1 min
 function generatedTimeEveryAfterEveryOneMinTRX() {
@@ -202,7 +205,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
 
 const generatedTimeEveryAfterEveryThreeMinTRX = () => {
   let min = 2;
-  const job = schedule.scheduleJob("* * * * * *", function () {
+   twoMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("threemintrx", `${min}_${timeToSend}`);
@@ -257,7 +260,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
 
 const generatedTimeEveryAfterEveryFiveMinTRX = () => {
   let min = 4;
-  const job = schedule.scheduleJob("* * * * * *", function () {
+   threeMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("fivemintrx", `${min}_${timeToSend}`);
@@ -316,53 +319,55 @@ let x = true;
 let trx = true;
 
 // console.log(time,moment(time).format("HH:mm:ss"))
-if (trx) {
-  const now = new Date();
-  const nowIST = soment(now).tz("Asia/Kolkata");
-  // const fiveHoursThirtyMinutesLater = nowIST.clone().add(5, 'hours').add(30, 'minutes');
+// if (trx) {
+//   const now = new Date();
+//   const nowIST = soment(now).tz("Asia/Kolkata");
+//   // const fiveHoursThirtyMinutesLater = nowIST.clone().add(5, 'hours').add(30, 'minutes');
 
-  const currentMinute = nowIST.minutes();
-  const currentSecond = nowIST.seconds();
+//   const currentMinute = nowIST.minutes();
+//   const currentSecond = nowIST.seconds();
 
-  // Calculate remaining minutes and seconds until 22:28 IST
-  const minutesRemaining = 15 - currentMinute - 1;
-  const secondsRemaining = 60 - currentSecond;
+//   // Calculate remaining minutes and seconds until 22:28 IST
+//   const minutesRemaining = 15 - currentMinute - 1;
+//   const secondsRemaining = 60 - currentSecond;
 
-  const delay = (minutesRemaining * 60 + secondsRemaining) * 1000;
-  console.log(minutesRemaining, secondsRemaining, delay);
+//   const delay = (minutesRemaining * 60 + secondsRemaining) * 1000;
+//   console.log(minutesRemaining, secondsRemaining, delay);
 
-  setTimeout(() => {
-    generatedTimeEveryAfterEveryOneMinTRX();
-    generatedTimeEveryAfterEveryThreeMinTRX();
-    generatedTimeEveryAfterEveryFiveMinTRX();
-    trx = false;
-  }, delay);
-}
-// generatedTimeEveryAfterEveryThreeMinTRX();
-
-// const job = schedule.scheduleJob(rule, function () {
-//   if (x) {
-//     console.log("Function is called now")
-//     generateAndSendMessage();
-//     generatedTimeEveryAfterEveryOneMin();
-//     generatedTimeEveryAfterEveryThreeMin();
-//     generatedTimeEveryAfterEveryFiveMin();
-//     x = false;
-//   }
-// });
+//   setTimeout(() => {
+//     generatedTimeEveryAfterEveryOneMinTRX();
+//     generatedTimeEveryAfterEveryThreeMinTRX();
+//     generatedTimeEveryAfterEveryFiveMinTRX();
+//     trx = false;
+//   }, delay);
+// }
 
 if (x) {
   // generateAndSendMessage();
   console.log("Waiting for the next minute to start...");
   const now = new Date();
   const secondsUntilNextMinute = 60 - now.getSeconds();
+  console.log("start after ",moment(new Date()).format("HH:mm:ss"), secondsUntilNextMinute);
+
   setTimeout(() => {
+    generatedTimeEveryAfterEveryOneMinTRX()
     generatedTimeEveryAfterEveryOneMin();
     generatedTimeEveryAfterEveryThreeMin();
     generatedTimeEveryAfterEveryFiveMin();
     x = false;
   }, secondsUntilNextMinute * 1000);
 }
+
+const finalRescheduleJob = schedule.scheduleJob(
+  "15,30,45,0 * * * *",
+  function () {
+    twoMinTrxJob?.cancel();
+    threeMinTrxJob?.cancel();
+    generatedTimeEveryAfterEveryThreeMinTRX();
+    generatedTimeEveryAfterEveryFiveMinTRX();
+  }
+);
+
 
 app.get("/", (req, res) => {
   res.send(`<h1>server running at port=====> ${PORT}</h1>`);
