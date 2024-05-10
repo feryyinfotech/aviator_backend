@@ -133,8 +133,7 @@ let threeMinTrxJob;
 // TRX
 // color prediction game time generated every 1 min
 function generatedTimeEveryAfterEveryOneMinTRX() {
-  let three = 0;
-  let five = 0;
+  let isAlreadyHit = "";
   const rule = new schedule.RecurrenceRule();
   rule.second = new schedule.Range(0, 59);
   const job = schedule.scheduleJob(rule, function () {
@@ -147,20 +146,9 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
     if (timeToSend === 6) {
       const datetoAPISend = parseInt(new Date().getTime().toString());
       const actualtome = soment.tz("Asia/Kolkata");
-      const time = actualtome.add(8, "hours").valueOf();
+      const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
 
       try {
-        if (three === 2) {
-          three = 0;
-        } else {
-          three++;
-        }
-
-        if (five === 4) {
-          five = 0;
-        } else {
-          five++;
-        }
         setTimeout(async () => {
           const res = await axios.get(
             `https://apilist.tronscanapi.com/api/block?sort=-balance&start=0&limit=20&producer=&number=&start_timestamp=${datetoAPISend}&end_timestamp=${datetoAPISend}`
@@ -172,7 +160,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
             fd.append("digits", `${obj.hash.slice(-5)}`);
             fd.append("number", obj.number);
             fd.append("time", moment(time).format("HH:mm:ss"));
-
+            let prevalue = `${moment(time).format("HH:mm:ss")}`;
             const newString = obj.hash;
             let num = null;
             for (let i = newString.length - 1; i >= 0; i--) {
@@ -185,10 +173,12 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
             fd.append("overall", JSON.stringify(obj));
             //  trx 1
             try {
+              if (String(isAlreadyHit) === String(prevalue)) return;
               const response = await axios.post(
                 "https://zupeeter.com/Apitrx/insert_one_trx",
                 fd
               );
+              isAlreadyHit = prevalue;
             } catch (e) {
               console.log(e);
             }
@@ -205,14 +195,14 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
 
 const generatedTimeEveryAfterEveryThreeMinTRX = () => {
   let min = 2;
-   twoMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
+  twoMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("threemintrx", `${min}_${timeToSend}`);
     if (min === 0 && timeToSend === 6) {
       const datetoAPISend = parseInt(new Date().getTime().toString());
       const actualtome = soment.tz("Asia/Kolkata");
-      const time = actualtome.add(8, "hours").valueOf();
+      const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
       try {
         setTimeout(async () => {
           const res = await axios.get(
@@ -237,7 +227,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
             fd.append("overall", JSON.stringify(obj));
             //  trx 3
             try {
-              console.log("functoin call for 3 min")
+              console.log("functoin call for 3 min");
               const response = await axios.post(
                 "https://zupeeter.com/Apitrx/insert_three_trx",
                 fd
@@ -260,14 +250,14 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
 
 const generatedTimeEveryAfterEveryFiveMinTRX = () => {
   let min = 4;
-   threeMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
+  threeMinTrxJob = schedule.scheduleJob("* * * * * *", function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("fivemintrx", `${min}_${timeToSend}`);
     if (min === 0 && timeToSend === 6) {
       const datetoAPISend = parseInt(new Date().getTime().toString());
       const actualtome = soment.tz("Asia/Kolkata");
-      const time = actualtome.add(8, "hours").valueOf();
+      const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
       try {
         setTimeout(async () => {
           const res = await axios.get(
@@ -292,7 +282,7 @@ const generatedTimeEveryAfterEveryFiveMinTRX = () => {
             fd.append("overall", JSON.stringify(obj));
             //  trx 3
             try {
-              console.log("functoin call for 5 min")
+              console.log("functoin call for 5 min");
               const response = await axios.post(
                 "https://zupeeter.com/Apitrx/insert_five_trx",
                 fd
@@ -347,10 +337,14 @@ if (x) {
   console.log("Waiting for the next minute to start...");
   const now = new Date();
   const secondsUntilNextMinute = 60 - now.getSeconds();
-  console.log("start after ",moment(new Date()).format("HH:mm:ss"), secondsUntilNextMinute);
+  console.log(
+    "start after ",
+    moment(new Date()).format("HH:mm:ss"),
+    secondsUntilNextMinute
+  );
 
   setTimeout(() => {
-    generatedTimeEveryAfterEveryOneMinTRX()
+    generatedTimeEveryAfterEveryOneMinTRX();
     generatedTimeEveryAfterEveryOneMin();
     generatedTimeEveryAfterEveryThreeMin();
     generatedTimeEveryAfterEveryFiveMin();
@@ -367,7 +361,6 @@ const finalRescheduleJob = schedule.scheduleJob(
     generatedTimeEveryAfterEveryFiveMinTRX();
   }
 );
-
 
 app.get("/", (req, res) => {
   res.send(`<h1>server running at port=====> ${PORT}</h1>`);
