@@ -175,7 +175,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
             try {
               if (String(isAlreadyHit) === String(prevalue)) return;
               const response = await axios.post(
-                "https://zupeeter.com/Apitrx/insert_one_trx",
+                "https://admin.zupeeter.com/Apitrx/insert_one_trx",
                 fd
               );
               isAlreadyHit = prevalue;
@@ -229,7 +229,7 @@ const generatedTimeEveryAfterEveryThreeMinTRX = () => {
             try {
               console.log("functoin call for 3 min");
               const response = await axios.post(
-                "https://zupeeter.com/Apitrx/insert_three_trx",
+                "https://admin.zupeeter.com/Apitrx/insert_three_trx",
                 fd
               );
             } catch (e) {
@@ -284,7 +284,7 @@ const generatedTimeEveryAfterEveryFiveMinTRX = () => {
             try {
               console.log("functoin call for 5 min");
               const response = await axios.post(
-                "https://zupeeter.com/Apitrx/insert_five_trx",
+                "https://admin.zupeeter.com/Apitrx/insert_five_trx",
                 fd
               );
             } catch (e) {
