@@ -126,9 +126,8 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
       }
        
     }
-     if(timeToSend === 0){
-       
-  });
+   
+  );
 };
 
 const generatedTimeEveryAfterEveryFiveMin = () => {
