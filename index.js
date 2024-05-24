@@ -439,15 +439,15 @@ if (x) {
   }, secondsUntilNextMinute * 1000);
 }
 
-// const finalRescheduleJob = schedule.scheduleJob(
-//   "15,30,45,0 * * * *",
-//   function () {
-//     twoMinTrxJob?.cancel();
-//     threeMinTrxJob?.cancel();
-//     generatedTimeEveryAfterEveryThreeMinTRX();
-//     generatedTimeEveryAfterEveryFiveMinTRX();
-//   }
-// );
+const finalRescheduleJob = schedule.scheduleJob(
+  "15,30,45,0 * * * *",
+  function () {
+    twoMinTrxJob?.cancel();
+    threeMinTrxJob?.cancel();
+    generatedTimeEveryAfterEveryThreeMinTRX();
+    generatedTimeEveryAfterEveryFiveMinTRX();
+  }
+);
 
 app.get("/", (req, res) => {
   res.send(`<h1>server running at port=====> ${PORT}</h1>`);
