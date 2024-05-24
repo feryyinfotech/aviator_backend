@@ -259,12 +259,12 @@ if (timeToSend === 6) {
         fd.append("overall", JSON.stringify(obj));
         //  trx 1
         try {
-          if (String(isAlreadyHit) === String(prevalue)) return;
+      
           const response = await axios.post(
             "https://admin.zupeeter.com/Apitrx/insert_one_trx",
             fd
           );
-          isAlreadyHit = prevalue;
+         
         } catch (e) {
           console.log(e);
         }
