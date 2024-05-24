@@ -230,10 +230,11 @@ const timeToSend =
     : currentTime.getSeconds();
 io.emit("onemintrx", timeToSend);
 if (timeToSend === 6) {
+  
   const datetoAPISend = parseInt(new Date().getTime().toString());
   const actualtome = soment.tz("Asia/Kolkata");
   const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
-
+  console.log("inside the if block",moment(time).format("HH:mm:ss"));
   try {
     setTimeout(async () => {
       const res = await axios.get(
