@@ -117,6 +117,13 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
       min--;
       if (min < 0) min = 2; // Reset min to 2 when it reaches 0
     }
+     if(timeToSend === 0){
+        try{
+        const res = await axios.get("https://admin.zupeeter.com/api/resultthreemin");
+        }catch(e){
+          console.log(e);
+        }
+      }
   });
 };
 
@@ -131,6 +138,13 @@ const generatedTimeEveryAfterEveryFiveMin = () => {
       min--;
       if (min < 0) min = 4; // Reset min to 2 when it reaches 0
     }
+     if(timeToSend === 0){
+        try{
+        const res = await axios.get("https://admin.zupeeter.com/api/resultfivemin");
+        }catch(e){
+          console.log(e);
+        }
+      }
   });
 };
 
