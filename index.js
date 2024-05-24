@@ -109,7 +109,7 @@ function generateAndSendMessage() {
 const generatedTimeEveryAfterEveryThreeMin = () => {
   let min = 2;
 
-  const job = schedule.scheduleJob("* * * * * *", function () {
+  const job = schedule.scheduleJob("* * * * * *", async function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("threemin", `${min}_${timeToSend}`);
@@ -130,7 +130,7 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
 const generatedTimeEveryAfterEveryFiveMin = () => {
   let min = 4;
 
-  const job = schedule.scheduleJob("* * * * * *", function () {
+  const job = schedule.scheduleJob("* * * * * *",async function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("fivemin", `${min}_${timeToSend}`);
