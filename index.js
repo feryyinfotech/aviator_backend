@@ -87,16 +87,23 @@ function generateAndSendMessage() {
 }
 
 // color prediction game time generated every 1 min
-function generatedTimeEveryAfterEveryOneMin() {
-  const job = schedule.scheduleJob("* * * * * *", function () {
-    const currentTime = new Date();
-    const timeToSend =
-      currentTime.getSeconds() > 0
-        ? 60 - currentTime.getSeconds()
-        : currentTime.getSeconds();
-    io.emit("onemin", timeToSend); // Emit the formatted time
-  });
-}
+  function generatedTimeEveryAfterEveryOneMin() {
+    const job = schedule.scheduleJob("* * * * * *", async function () {
+      const currentTime = new Date();
+      const timeToSend =
+        currentTime.getSeconds() > 0
+          ? 60 - currentTime.getSeconds()
+          : currentTime.getSeconds();
+      io.emit("onemin", timeToSend); // Emit the formatted time
+      if(timeToSend === 0){
+        try{
+        const res = await axios.get("https://admin.zupeeter.com/api/resultonemin");
+        }catch(e){
+          console.log(e);
+        }
+      }
+    });
+  }
 
 // color prediction game time generated every 3 min
 const generatedTimeEveryAfterEveryThreeMin = () => {
