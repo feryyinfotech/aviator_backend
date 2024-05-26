@@ -243,26 +243,26 @@ if (timeToSend === 6) {
       if (res?.data?.data[0]) {
      
         const obj = res.data.data[0];
-        const fd = new FormData();
-        fd.append("hash", `**${obj.hash.slice(-4)}`);
-        fd.append("digits", `${obj.hash.slice(-5)}`);
-        fd.append("number", obj.number);
-        fd.append("time", moment(time).format("HH:mm:ss"));
-        let prevalue = `${moment(time).format("HH:mm:ss")}`;
-        const newString = obj.hash;
-        let num = null;
-        for (let i = newString.length - 1; i >= 0; i--) {
-          if (!isNaN(parseInt(newString[i]))) {
-            num = parseInt(newString[i]);
-            break;
-          }
-        }
-        fd.append("slotid", num);
-        fd.append("overall", JSON.stringify(obj));
+        // const fd = new FormData();
+        // fd.append("hash", `**${obj.hash.slice(-4)}`);
+        // fd.append("digits", `${obj.hash.slice(-5)}`);
+        // fd.append("number", obj.number);
+        // fd.append("time", moment(time).format("HH:mm:ss"));
+        // let prevalue = `${moment(time).format("HH:mm:ss")}`;
+        // const newString = obj.hash;
+        // let num = null;
+        // for (let i = newString.length - 1; i >= 0; i--) {
+        //   if (!isNaN(parseInt(newString[i]))) {
+        //     num = parseInt(newString[i]);
+        //     break;
+        //   }
+        // }
+        // fd.append("slotid", num);
+        // fd.append("overall", JSON.stringify(obj));
         //  trx 1
         try {
            if (String(isAlreadyHit) === String(prevalue)) return;
-           io.emit("onemintrxdata", fd);
+           io.emit("onemintrxdata", obj);
           // const response = await axios.post(
           //   "https://admin.zupeeter.com/Apitrx/insert_one_trx",
           //   fd
