@@ -248,7 +248,7 @@ if (timeToSend === 6) {
         // fd.append("digits", `${obj.hash.slice(-5)}`);
         // fd.append("number", obj.number);
         // fd.append("time", moment(time).format("HH:mm:ss"));
-        // let prevalue = `${moment(time).format("HH:mm:ss")}`;
+        let prevalue = `${moment(time).format("HH:mm:ss")}`;
         // const newString = obj.hash;
         // let num = null;
         // for (let i = newString.length - 1; i >= 0; i--) {
