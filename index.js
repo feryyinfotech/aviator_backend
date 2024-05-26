@@ -8,6 +8,8 @@ const soment = require("moment-timezone");
 require("dotenv").config();
 const schedule = require("node-schedule");
 const { default: axios } = require("axios");
+const mysql = require("mysql");
+
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
@@ -30,6 +32,100 @@ app.use(express.json());
 const PORT = process.env.PORT || 4000;
 
 app.use("/api/v1", todoRoutes);
+
+// Create the connection pool
+const pool = mysql.createPool({
+  connectionLimit: 10,
+  host: "103.180.163.173",
+  user: "zupeeterdb",
+  password: "S1s5h71k#",
+  database: "admin_zupeeterdb",
+  multipleStatements: true,
+  connectTimeout: 10000,
+});
+
+// Event listener for new connections
+pool.on("connection", function (_conn) {
+  if (_conn) {
+    console.log(`Connected to the database via threadId ${_conn.threadId}!!`);
+    _conn.query("SET SESSION auto_increment_increment=1");
+  }
+});
+
+// Function to insert data into trxonetable
+function insertIntoTrxonetable(time, obj, callback) {
+  // Get a connection from the pool
+
+  console.log(obj);
+
+  const newString = obj.hash;
+  let num = null;
+  for (let i = newString.length - 1; i >= 0; i--) {
+    if (!isNaN(parseInt(newString[i]))) {
+      num = parseInt(newString[i]);
+      break;
+    }
+  }
+
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Error getting database connection: ", err);
+      return callback(err);
+    }
+    let timee = moment(time).format("HH:mm:ss");
+    let hash = `**${obj.hash.slice(-4)}`;
+    let overall = JSON.stringify(obj);
+    let trdigit = `${obj.hash.slice(-5)}`;
+    // Create the insert query
+    // const sql =
+    //   "INSERT INTO tr42_win_slot (tr09_req_recipt) VALUES (?)"; // Adjust the columns and values as per your table structure
+
+    // Execute the query
+    const query_id =
+      "SELECT tr_tranaction_id,tr_price FROM tr_game WHERE tr_id = 1";
+    connection.query(query_id, (error, results) => {
+      console.log(results, "anand");
+      const sqlupdatequery = `UPDATE tr_game SET tr_tranaction_id = ${
+        Number(results?.[0]?.tr_tranaction_id) + 1
+      }, tr_price = ${Number(results?.[0]?.tr_price) + 1}`;
+      connection.query(sqlupdatequery, (error, res) => {
+        if (error) {
+          console.error("Error executing query: ", error);
+          // return callback(error);
+        }
+      });
+      const sql =
+        "INSERT INTO tr42_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
+
+      // Release the connection back to the pool
+      connection.query(
+        sql,
+        [
+          num + 1,
+          timee,
+          1,
+          Number(results?.[0]?.tr_tranaction_id) + 1,
+          Number(results?.[0]?.tr_price) + 1,
+          hash,
+          overall,
+          trdigit,
+        ],
+        (error, result) => {
+          console.log(result);
+          if (error) {
+            console.error("Error executing query: ", error);
+            return callback(error);
+          }
+        }
+      );
+
+      connection.release();
+
+      // Return the results via the callback
+      callback(null, results);
+    });
+  });
+}
 
 const array = [
   2, 20, 2, 30, 2, 60, 10, 2, 3, 18, 2, 17, 12, 40, 10, 2, 5, 3, 2, 2, 12, 13,
@@ -203,10 +299,18 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
             //  trx 1
             try {
               if (String(isAlreadyHit) === String(prevalue)) return;
-              const response = await axios.post(
-                "https://admin.zupeeter.com/Apitrx/insert_one_trx",
-                fd
-              );
+              // const response = await axios.post(
+              //   "https://admin.zupeeter.com/Apitrx/insert_one_trx",
+              //   fd
+              // );
+              insertIntoTrxonetable(time, obj, (err, results) => {
+                if (err) {
+                  console.error("Error inserting data: ", err);
+                } else {
+                  console.log("Data inserted successfully: ", results);
+                }
+              });
+
               isAlreadyHit = prevalue;
             } catch (e) {
               console.log(e);
