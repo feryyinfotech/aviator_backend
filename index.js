@@ -87,23 +87,25 @@ function generateAndSendMessage() {
 }
 
 // color prediction game time generated every 1 min
-  function generatedTimeEveryAfterEveryOneMin() {
-    const job = schedule.scheduleJob("* * * * * *", async function () {
-      const currentTime = new Date();
-      const timeToSend =
-        currentTime.getSeconds() > 0
-          ? 60 - currentTime.getSeconds()
-          : currentTime.getSeconds();
-      io.emit("onemin", timeToSend); // Emit the formatted time
-      if(timeToSend === 0){
-        try{
-        const res = await axios.get("https://admin.zupeeter.com/api/resultonemin");
-        }catch(e){
-          console.log(e);
-        }
+function generatedTimeEveryAfterEveryOneMin() {
+  const job = schedule.scheduleJob("* * * * * *", async function () {
+    const currentTime = new Date();
+    const timeToSend =
+      currentTime.getSeconds() > 0
+        ? 60 - currentTime.getSeconds()
+        : currentTime.getSeconds();
+    io.emit("onemin", timeToSend); // Emit the formatted time
+    if (timeToSend === 0) {
+      try {
+        const res = await axios.get(
+          "https://admin.zupeeter.com/api/resultonemin"
+        );
+      } catch (e) {
+        console.log(e);
       }
-    });
-  }
+    }
+  });
+}
 
 // color prediction game time generated every 3 min
 const generatedTimeEveryAfterEveryThreeMin = () => {
@@ -115,43 +117,42 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
     io.emit("threemin", `${min}_${timeToSend}`);
     if (currentTime === 0) {
       min--;
-      if (min < 0){
-         try{
-        const res = await axios.get("https://admin.zupeeter.com/api/resultthreemin");
-        }catch(e){
+      if (min < 0) {
+        try {
+          const res = await axios.get(
+            "https://admin.zupeeter.com/api/resultthreemin"
+          );
+        } catch (e) {
           console.log(e);
         }
-         min = 2; // Reset min to 2 when it reaches 0
+        min = 2; // Reset min to 2 when it reaches 0
       }
-      }
-       
     }
-   
-  );
+  });
 };
 
 const generatedTimeEveryAfterEveryFiveMin = () => {
   let min = 4;
 
-  const job = schedule.scheduleJob("* * * * * *",async function () {
+  const job = schedule.scheduleJob("* * * * * *", async function () {
     const currentTime = new Date().getSeconds(); // Get the current time
     const timeToSend = currentTime > 0 ? 60 - currentTime : currentTime;
     io.emit("fivemin", `${min}_${timeToSend}`);
     if (currentTime === 0) {
       min--;
-      if (min < 0){
-         try{
-        const res = await axios.get("https://admin.zupeeter.com/api/resultfivemin");
-        }catch(e){
+      if (min < 0) {
+        try {
+          const res = await axios.get(
+            "https://admin.zupeeter.com/api/resultfivemin"
+          );
+        } catch (e) {
           console.log(e);
         }
-         min = 4; // Reset min to 2 when it reaches 0
+        min = 4; // Reset min to 2 when it reaches 0
       }
-       
     }
-     if(timeToSend === 0){
-       
-      }
+    if (timeToSend === 0) {
+    }
   });
 };
 
@@ -160,129 +161,125 @@ let threeMinTrxJob;
 
 // TRX
 // color prediction game time generated every 1 min
-// function generatedTimeEveryAfterEveryOneMinTRX() {
-//   let isAlreadyHit = "";
-//   const rule = new schedule.RecurrenceRule();
-//   rule.second = new schedule.Range(0, 59);
-//   const job = schedule.scheduleJob(rule, function () {
-//     const currentTime = new Date();
-//     const timeToSend =
-//       currentTime.getSeconds() > 0
-//         ? 60 - currentTime.getSeconds()
-//         : currentTime.getSeconds();
-//     io.emit("onemintrx", timeToSend);
-//     if (timeToSend === 6) {
-//       const datetoAPISend = parseInt(new Date().getTime().toString());
-//       const actualtome = soment.tz("Asia/Kolkata");
-//       const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
-
-//       try {
-//         setTimeout(async () => {
-//           const res = await axios.get(
-//             `https://apilist.tronscanapi.com/api/block?sort=-balance&start=0&limit=20&producer=&number=&start_timestamp=${datetoAPISend}&end_timestamp=${datetoAPISend}`
-//           );
-//           if (res?.data?.data[0]) {
-//             const obj = res.data.data[0];
-//             const fd = new FormData();
-//             fd.append("hash", `**${obj.hash.slice(-4)}`);
-//             fd.append("digits", `${obj.hash.slice(-5)}`);
-//             fd.append("number", obj.number);
-//             fd.append("time", moment(time).format("HH:mm:ss"));
-//             let prevalue = `${moment(time).format("HH:mm:ss")}`;
-//             const newString = obj.hash;
-//             let num = null;
-//             for (let i = newString.length - 1; i >= 0; i--) {
-//               if (!isNaN(parseInt(newString[i]))) {
-//                 num = parseInt(newString[i]);
-//                 break;
-//               }
-//             }
-//             fd.append("slotid", num);
-//             fd.append("overall", JSON.stringify(obj));
-//             //  trx 1
-//             try {
-//               if (String(isAlreadyHit) === String(prevalue)) return;
-//               const response = await axios.post(
-//                 "https://admin.zupeeter.com/Apitrx/insert_one_trx",
-//                 fd
-//               );
-//               isAlreadyHit = prevalue;
-//             } catch (e) {
-//               console.log(e);
-//             }
-//           }
-//         }, [6000]);
-//       } catch (e) {
-//         console.log(e);
-//       }
-//     }
-//   });
-// }
-
-
 function generatedTimeEveryAfterEveryOneMinTRX() {
   let isAlreadyHit = "";
-  setInterval(() => {
+  const rule = new schedule.RecurrenceRule();
+  rule.second = new schedule.Range(0, 59);
+  const job = schedule.scheduleJob(rule, function () {
     const currentTime = new Date();
-const timeToSend =
-  currentTime.getSeconds() > 0
-    ? 60 - currentTime.getSeconds()
-    : currentTime.getSeconds();
-io.emit("onemintrx", timeToSend);
-if (timeToSend === 6) {
-  
-  const datetoAPISend = parseInt(new Date().getTime().toString());
-  const actualtome = soment.tz("Asia/Kolkata");
-  const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
-  // console.log("inside the if block",moment(time).format("HH:mm:ss"));
-  try {
-    setTimeout(async () => {
-      const res = await axios.get(
-        `https://apilist.tronscanapi.com/api/block?sort=-balance&start=0&limit=20&producer=&number=&start_timestamp=${datetoAPISend}&end_timestamp=${datetoAPISend}`
-      );
-      if (res?.data?.data[0]) {
-     
-        const obj = res.data.data[0];
-        const fd = new FormData();
-        fd.append("hash", `**${obj.hash.slice(-4)}`);
-        fd.append("digits", `${obj.hash.slice(-5)}`);
-        fd.append("number", obj.number);
-        fd.append("time", moment(time).format("HH:mm:ss"));
-        let prevalue = `${moment(time).format("HH:mm:ss")}`;
-        const newString = obj.hash;
-        let num = null;
-        for (let i = newString.length - 1; i >= 0; i--) {
-          if (!isNaN(parseInt(newString[i]))) {
-            num = parseInt(newString[i]);
-            break;
-          }
-        }
-        fd.append("slotid", num);
-        fd.append("overall", JSON.stringify(obj));
-        //  trx 1
-        try {
-           if (String(isAlreadyHit) === String(prevalue)) return;
-           io.emit("onemintrxdata", obj);
-          // const response = await axios.post(
-          //   "https://admin.zupeeter.com/Apitrx/insert_one_trx",
-          //   fd
-          // );
+    const timeToSend =
+      currentTime.getSeconds() > 0
+        ? 60 - currentTime.getSeconds()
+        : currentTime.getSeconds();
+    io.emit("onemintrx", timeToSend);
+    if (timeToSend === 6) {
+      const datetoAPISend = parseInt(new Date().getTime().toString());
+      const actualtome = soment.tz("Asia/Kolkata");
+      const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
+
+      try {
+        setTimeout(async () => {
+          const res = await axios.get(
+            `https://apilist.tronscanapi.com/api/block?sort=-balance&start=0&limit=20&producer=&number=&start_timestamp=${datetoAPISend}&end_timestamp=${datetoAPISend}`
+          );
+          if (res?.data?.data[0]) {
+            const obj = res.data.data[0];
+            const fd = new FormData();
+            fd.append("hash", `**${obj.hash.slice(-4)}`);
+            fd.append("digits", `${obj.hash.slice(-5)}`);
+            fd.append("number", obj.number);
+            fd.append("time", moment(time).format("HH:mm:ss"));
+            let prevalue = `${moment(time).format("HH:mm:ss")}`;
+            const newString = obj.hash;
+            let num = null;
+            for (let i = newString.length - 1; i >= 0; i--) {
+              if (!isNaN(parseInt(newString[i]))) {
+                num = parseInt(newString[i]);
+                break;
+              }
+            }
+            fd.append("slotid", num);
+            fd.append("overall", JSON.stringify(obj));
+            //  trx 1
+            try {
+              if (String(isAlreadyHit) === String(prevalue)) return;
+              const response = await axios.post(
+                "https://admin.zupeeter.com/Apitrx/insert_one_trx",
+                fd
+              );
               isAlreadyHit = prevalue;
-
-        } catch (e) {
-          console.log(e);
-        }
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        }, [6000]);
+      } catch (e) {
+        console.log(e);
       }
-    }, [6000]);
-  } catch (e) {
-    console.log(e);
-  }
-}
-}, 1000); 
+    }
+  });
 }
 
+// function generatedTimeEveryAfterEveryOneMinTRX() {
+//   let isAlreadyHit = "";
+//   setInterval(() => {
+//     const currentTime = new Date();
+// const timeToSend =
+//   currentTime.getSeconds() > 0
+//     ? 60 - currentTime.getSeconds()
+//     : currentTime.getSeconds();
+// io.emit("onemintrx", timeToSend);
+// if (timeToSend === 6) {
 
+//   const datetoAPISend = parseInt(new Date().getTime().toString());
+//   const actualtome = soment.tz("Asia/Kolkata");
+//   const time = actualtome.add(5, "hours").add(30, "minutes").valueOf();
+//   // console.log("inside the if block",moment(time).format("HH:mm:ss"));
+//   try {
+//     setTimeout(async () => {
+//       const res = await axios.get(
+//         `https://apilist.tronscanapi.com/api/block?sort=-balance&start=0&limit=20&producer=&number=&start_timestamp=${datetoAPISend}&end_timestamp=${datetoAPISend}`
+//       );
+//       if (res?.data?.data[0]) {
 
+//         const obj = res.data.data[0];
+//         const fd = new FormData();
+//         fd.append("hash", `**${obj.hash.slice(-4)}`);
+//         fd.append("digits", `${obj.hash.slice(-5)}`);
+//         fd.append("number", obj.number);
+//         fd.append("time", moment(time).format("HH:mm:ss"));
+//         let prevalue = `${moment(time).format("HH:mm:ss")}`;
+//         const newString = obj.hash;
+//         let num = null;
+//         for (let i = newString.length - 1; i >= 0; i--) {
+//           if (!isNaN(parseInt(newString[i]))) {
+//             num = parseInt(newString[i]);
+//             break;
+//           }
+//         }
+//         fd.append("slotid", num);
+//         fd.append("overall", JSON.stringify(obj));
+//         //  trx 1
+//         try {
+//            if (String(isAlreadyHit) === String(prevalue)) return;
+//            io.emit("onemintrxdata", obj);
+//           // const response = await axios.post(
+//           //   "https://admin.zupeeter.com/Apitrx/insert_one_trx",
+//           //   fd
+//           // );
+//               isAlreadyHit = prevalue;
+
+//         } catch (e) {
+//           console.log(e);
+//         }
+//       }
+//     }, [6000]);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+// }, 1000);
+// }
 
 // generatedTimeEveryAfterEveryOneMinTRX();
 
