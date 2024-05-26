@@ -54,10 +54,6 @@ pool.on("connection", function (_conn) {
 
 // Function to insert data into trxonetable
 function insertIntoTrxonetable(time, obj, callback) {
-  // Get a connection from the pool
-
-  console.log(obj);
-
   const newString = obj.hash;
   let num = null;
   for (let i = newString.length - 1; i >= 0; i--) {
@@ -84,7 +80,6 @@ function insertIntoTrxonetable(time, obj, callback) {
     const query_id =
       "SELECT tr_tranaction_id,tr_price FROM tr_game WHERE tr_id = 1";
     connection.query(query_id, (error, results) => {
-      console.log(results, "anand");
       const sqlupdatequery = `UPDATE tr_game SET tr_tranaction_id = ${
         Number(results?.[0]?.tr_tranaction_id) + 1
       }, tr_price = ${Number(results?.[0]?.tr_price) + 1}`;
@@ -96,7 +91,21 @@ function insertIntoTrxonetable(time, obj, callback) {
       });
       const sql =
         "INSERT INTO tr42_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
+      const sql43 =
+        "INSERT INTO tr43_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
 
+      connection.query(sql43,[
+        num + 1,
+        timee,
+        1,
+        Number(results?.[0]?.tr_tranaction_id) + 1,
+        Number(results?.[0]?.tr_price) + 1,
+        hash,
+        overall,
+        trdigit,
+      ],(error, res) => {
+        if (error) console.log(err);
+      });
       // Release the connection back to the pool
       connection.query(
         sql,
@@ -111,7 +120,6 @@ function insertIntoTrxonetable(time, obj, callback) {
           trdigit,
         ],
         (error, result) => {
-          console.log(result);
           if (error) {
             console.error("Error executing query: ", error);
             return callback(error);
@@ -316,7 +324,7 @@ function generatedTimeEveryAfterEveryOneMinTRX() {
               console.log(e);
             }
           }
-        }, [6000]);
+        }, [4000]);
       } catch (e) {
         console.log(e);
       }
