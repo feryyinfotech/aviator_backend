@@ -72,6 +72,7 @@ function insertIntoTrxonetable(time, obj, callback) {
     let hash = `**${obj.hash.slice(-4)}`;
     let overall = JSON.stringify(obj);
     let trdigit = `${obj.hash.slice(-5)}`;
+    let tr_number =  obj.number
     // Create the insert query
     // const sql =
     //   "INSERT INTO tr42_win_slot (tr09_req_recipt) VALUES (?)"; // Adjust the columns and values as per your table structure
@@ -90,9 +91,9 @@ function insertIntoTrxonetable(time, obj, callback) {
         }
       });
       const sql =
-        "INSERT INTO tr42_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
+        "INSERT INTO tr42_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits,tr_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
       const sql43 =
-        "INSERT INTO tr43_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
+        "INSERT INTO tr43_win_slot (tr41_slot_id, tr_block_time, tr41_packtype,tr_transaction_id,tr_price,tr_hashno,tr_overall_hash,tr_digits,tr_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Adjust the columns and values as per your table structure
 
       connection.query(sql43,[
         num + 1,
@@ -103,6 +104,7 @@ function insertIntoTrxonetable(time, obj, callback) {
         hash,
         overall,
         trdigit,
+        tr_number
       ],(error, res) => {
         if (error) console.log(err);
       });
@@ -118,6 +120,7 @@ function insertIntoTrxonetable(time, obj, callback) {
           hash,
           overall,
           trdigit,
+          tr_number
         ],
         (error, result) => {
           if (error) {
